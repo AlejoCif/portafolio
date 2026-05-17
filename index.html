@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alejandro Cifuentes — Soluciones Digitales</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0f0e0c;
+    --paper: #f5f2ec;
+    --accent: #c8441a;
+    --accent2: #2d5a3d;
+    --muted: #7a7568;
+    --border: #d9d4c8;
+    --card: #ffffff;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── HEADER / NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 3rem;
+    background: rgba(245, 242, 236, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--accent); }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+  }
+
+  nav ul a {
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--muted);
+    transition: color 0.2s;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  nav ul a:hover { color: var(--ink); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 4rem 4rem 3rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 0.3rem 0.8rem;
+    margin-bottom: 2rem;
+    width: fit-content;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 420px;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+    font-weight: 300;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    padding: 0.9rem 2rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-primary:hover {
+    background: #a8361a;
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    display: inline-block;
+    border: 1.5px solid var(--ink);
+    color: var(--ink);
+    padding: 0.9rem 2rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .hero-right {
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 3rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,68,26,0.3) 0%, transparent 70%);
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stat-item {
+    padding: 1.5rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+  }
+
+  .stat-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--accent);
+  }
+
+  .stat-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .hero-tagline {
+    margin-top: 2.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.4);
+    font-size: 0.85rem;
+    font-style: italic;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 5rem 3rem;
+  }
+
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 60px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+    line-height: 1.15;
+  }
+
+  .section-desc {
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ── NICHO / PROBLEMA ── */
+  .nicho-section {
+    background: var(--ink);
+    color: white;
+  }
+
+  .nicho-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .nicho-left .section-label { color: var(--accent); }
+
+  .nicho-left .section-title { color: white; }
+
+  .nicho-left p {
+    color: rgba(255,255,255,0.6);
+    line-height: 1.8;
+    margin-top: 1.5rem;
+    font-weight: 300;
+  }
+
+  .problema-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .problema-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.2rem 1.5rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+  }
+
+  .problema-list li .icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .problema-list li .text {
+    color: rgba(255,255,255,0.75);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .problema-list li .text strong {
+    color: white;
+    display: block;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.2rem;
+    font-weight: 600;
+  }
+
+  /* ── PROYECTOS ── */
+  .proyectos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5px;
+    background: var(--border);
+    border: 1.5px solid var(--border);
+    margin-top: 3rem;
+  }
+
+  .proyecto-card {
+    background: var(--card);
+    padding: 2.5rem;
+    position: relative;
+    transition: all 0.25s;
+    overflow: hidden;
+  }
+
+  .proyecto-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .proyecto-card:hover::before { transform: scaleX(1); }
+
+  .proyecto-card:hover { background: #fafaf7; }
+
+  .proyecto-tipo {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .proyecto-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+
+  .proyecto-card p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+  }
+
+  .proyecto-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .proyecto-resultado {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--accent2);
+    font-weight: 500;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .proyecto-resultado::before {
+    content: '→';
+    font-size: 0.9rem;
+  }
+
+  /* ── PROYECTO DESTACADO ── */
+  .proyecto-destacado {
+    grid-column: 1 / -1;
+    background: var(--ink);
+    color: white;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .proyecto-destacado::before {
+    content: 'CASO REAL';
+    position: absolute;
+    top: 2rem; right: -2rem;
+    background: var(--accent);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    padding: 0.3rem 3rem;
+    transform: rotate(45deg);
+    transform-origin: center;
+  }
+
+  .proyecto-destacado .proyecto-tipo { color: rgba(255,255,255,0.5); }
+
+  .proyecto-destacado h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+    color: white;
+  }
+
+  .proyecto-destacado p {
+    color: rgba(255,255,255,0.65);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+  }
+
+  .proyecto-destacado .tag {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.6);
+  }
+
+  .proyecto-destacado .proyecto-resultado {
+    border-top-color: rgba(255,255,255,0.1);
+    color: #7ec99a;
+  }
+
+  .demo-box {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 2rem;
+    min-width: 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-self: center;
+  }
+
+  .demo-box p {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.45);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .demo-url {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    color: white;
+    word-break: break-all;
+    line-height: 1.4;
+  }
+
+  .btn-demo {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: background 0.2s;
+  }
+
+  .btn-demo:hover { background: #a8361a; }
+
+  @media (max-width: 700px) {
+    .proyecto-destacado {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .demo-box { min-width: unset; }
+  }
+
+  /* ── SERVICIOS ── */
+  .servicios-section {
+    background: #f0ece3;
+  }
+
+  .servicios-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 3rem;
+    border: 1px solid var(--border);
+  }
+
+  .servicio-item {
+    background: var(--paper);
+    padding: 2rem;
+    transition: background 0.2s;
+  }
+
+  .servicio-item:hover { background: white; }
+
+  .servicio-icon {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+
+  .servicio-item h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .servicio-item p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .servicio-precio {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent2);
+    letter-spacing: 0.03em;
+  }
+
+  /* ── STACK ── */
+  .stack-section { background: var(--ink); }
+
+  .stack-section .section-title { color: white; }
+  .stack-section .section-desc { color: rgba(255,255,255,0.5); }
+  .stack-section .section-label { color: var(--accent); }
+
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.06);
+    margin-top: 3rem;
+  }
+
+  .stack-group {
+    background: var(--ink);
+    padding: 2rem;
+  }
+
+  .stack-group h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .stack-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .stack-item {
+    font-size: 0.875rem;
+    color: rgba(255,255,255,0.65);
+    padding: 0.4rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-weight: 300;
+    transition: color 0.2s;
+  }
+
+  .stack-item:last-child { border: none; }
+  .stack-item:hover { color: white; }
+
+  /* ── CTA ── */
+  .cta-section {
+    background: var(--accent);
+  }
+
+  .cta-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 5rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .cta-inner h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .cta-inner p {
+    color: rgba(255,255,255,0.7);
+    margin-top: 0.8rem;
+    font-weight: 300;
+    font-size: 1rem;
+  }
+
+  .btn-white {
+    display: inline-block;
+    background: white;
+    color: var(--accent);
+    padding: 1rem 2.2rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-white:hover {
+    background: var(--paper);
+    transform: translateY(-2px);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #080807;
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    color: white;
+    font-size: 1rem;
+  }
+
+  .footer-logo span { color: var(--accent); }
+
+  footer p {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-left > * {
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+  }
+
+  .hero-left > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero-left > *:nth-child(2) { animation-delay: 0.2s; }
+  .hero-left > *:nth-child(3) { animation-delay: 0.35s; }
+  .hero-left > *:nth-child(4) { animation-delay: 0.5s; }
+
+  .hero-right {
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    nav ul { display: none; }
+
+    .hero {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+
+    .hero-left { padding: 7rem 1.5rem 3rem; }
+    .hero-right { padding: 3rem 1.5rem; }
+    .hero-stats { grid-template-columns: 1fr 1fr; }
+
+    .nicho-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .servicios-grid { grid-template-columns: 1fr 1fr; }
+    .stack-grid { grid-template-columns: 1fr 1fr; }
+    .cta-inner { grid-template-columns: 1fr; }
+    .section-inner { padding: 3.5rem 1.5rem; }
+  }
+
+  @media (max-width: 600px) {
+    .servicios-grid { grid-template-columns: 1fr; }
+    .stack-grid { grid-template-columns: 1fr 1fr; }
+    .hero-stats { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .stat-number { font-size: 2rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">Alejandro<span>.</span></a>
+  <ul>
+    <li><a href="#proyectos">Proyectos</a></li>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#stack">Tecnologías</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Desarrollo de sistemas para organizaciones</div>
+    <h1>Soluciones digitales que <em>reemplazan el papel</em></h1>
+    <p class="hero-sub">
+      Construyo sistemas administrativos a la medida para cooperativas, organizaciones y empresas colombianas: remisiones, registro de afiliados, gestión documental y automatización de procesos que hoy se hacen en Excel o en papel.
+    </p>
+    <div class="hero-actions">
+      <a href="#proyectos" class="btn-primary">Ver proyectos reales</a>
+      <a href="#contacto" class="btn-secondary">Hablemos</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-number">3+</div>
+        <div class="stat-label">Sistemas en producción</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Proyectos a medida</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">4</div>
+        <div class="stat-label">Países con despliegues</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">0</div>
+        <div class="stat-label">Plantillas genéricas</div>
+      </div>
+    </div>
+    <p class="hero-tagline">
+      "Cada sistema que construyo resuelve un problema real, no un problema teórico."
+    </p>
+  </div>
+</section>
+
+<!-- NICHO / PROBLEMA -->
+<section class="nicho-section">
+  <div class="section-inner">
+    <div class="nicho-grid">
+      <div class="nicho-left">
+        <div class="section-label">El problema que resuelvo</div>
+        <h2 class="section-title">Su organización sigue operando en papel o en Excel</h2>
+        <p>
+          Cooperativas agropecuarias, partidos políticos, gremios y empresas medianas en Colombia manejan procesos críticos de forma manual: remisiones en papel, registros en hojas de cálculo, documentos sin trazabilidad, flujos de aprobación por WhatsApp. Eso cuesta tiempo, genera errores y representa riesgo operativo.
+        </p>
+        <p style="margin-top:1rem;">
+          Yo construyo el sistema que digitaliza exactamente ese proceso, sin soluciones genéricas ni software de terceros que no encaja.
+        </p>
+      </div>
+      <ul class="problema-list">
+        <li>
+          <span class="icon">📋</span>
+          <span class="text">
+            <strong>Registro y validación manual</strong>
+            Afiliados, avales o remisiones que se ingresan a mano y se pierden o duplican.
+          </span>
+        </li>
+        <li>
+          <span class="icon">📄</span>
+          <span class="text">
+            <strong>Documentos sin automatización</strong>
+            PDFs, certificados o actas que se generan uno a uno en Word o se imprimen para firmar.
+          </span>
+        </li>
+        <li>
+          <span class="icon">🔐</span>
+          <span class="text">
+            <strong>Sin control de acceso ni auditoría</strong>
+            Cualquiera puede ver o modificar información sin registro de quién hizo qué y cuándo.
+          </span>
+        </li>
+        <li>
+          <span class="icon">🗂️</span>
+          <span class="text">
+            <strong>Información dispersa</strong>
+            Datos en correos, carpetas de Drive, WhatsApp y hojas de cálculo distintas sin integración.
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PROYECTOS -->
+<section id="proyectos">
+  <div class="section-inner">
+    <div class="section-label">Proyectos reales</div>
+    <h2 class="section-title">Sistemas construidos y en operación</h2>
+    <p class="section-desc">No mockups ni demos. Plataformas que organizaciones reales usan hoy para sus procesos internos.</p>
+
+    <div class="proyectos-grid">
+
+      <!-- DESTACADO -->
+      <div class="proyecto-destacado">
+        <div>
+          <div class="proyecto-tipo">Cooperativa agrícola · En producción · Acceso público</div>
+          <h3>Sistema de Remisiones — ASOSUPERFRUVER</h3>
+          <p>
+            Reemplazó completamente el proceso manual de generación de remisiones en Excel para una cooperativa de papa en Colombia. El sistema permite registrar despachos, seleccionar conductor con autocompletado de placa, calcular canastillas y totales automáticamente, y generar PDFs con formato corporativo, consecutivo automático y firma. Desplegado en dominio propio con integración GitHub → Hostinger.
+          </p>
+          <div class="proyecto-tags">
+            <span class="tag">PHP puro</span>
+            <span class="tag">FPDF</span>
+            <span class="tag">PDF automático</span>
+            <span class="tag">Consecutivo</span>
+            <span class="tag">Hostinger</span>
+            <span class="tag">Git deploy</span>
+            <span class="tag">Formulario dinámico</span>
+          </div>
+          <div class="proyecto-resultado">Eliminó la generación manual de remisiones en Excel — sistema en uso diario</div>
+        </div>
+        <div class="demo-box">
+          <p>Ver sistema en vivo</p>
+          <div class="demo-url">asosuperfruverune.com/remisiones/</div>
+          <a href="https://asosuperfruverune.com/remisiones/" target="_blank" class="btn-demo">Abrir sistema →</a>
+        </div>
+      </div>
+
+      <div class="proyecto-card">
+        <div class="proyecto-tipo">Sistema político · En producción</div>
+        <h3>Plataforma de Gestión de Avales</h3>
+        <p>
+          Sistema completo para una organización política colombiana. Maneja registro de afiliados, validación por cédula y cargo, generación automática de avales individuales y grupales en PDF con firma digital, control de acceso por roles y logs de auditoría de cada acción.
+        </p>
+        <div class="proyecto-tags">
+          <span class="tag">PHP</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">PDF automático</span>
+          <span class="tag">Firma digital</span>
+          <span class="tag">AJAX</span>
+          <span class="tag">Exportación Excel</span>
+        </div>
+        <div class="proyecto-resultado">Eliminó un proceso 100% manual de validación de avales en papel</div>
+      </div>
+
+      <div class="proyecto-card">
+        <div class="proyecto-tipo">Sistema de afiliaciones · En producción</div>
+        <h3>Formulario Inteligente de Afiliación</h3>
+        <p>
+          Sistema de captura de datos con formulario dinámico que incluye firma en canvas, validaciones en tiempo real, generación automática del PDF de afiliación y envío inmediato por correo. Municipios y departamentos de Colombia integrados dinámicamente.
+        </p>
+        <div class="proyecto-tags">
+          <span class="tag">JavaScript</span>
+          <span class="tag">PHP</span>
+          <span class="tag">Canvas firma</span>
+          <span class="tag">PDF auto</span>
+          <span class="tag">Email</span>
+          <span class="tag">MySQL</span>
+        </div>
+        <div class="proyecto-resultado">Redujo el tiempo de afiliación de 15 minutos a menos de 3</div>
+      </div>
+
+      <div class="proyecto-card">
+        <div class="proyecto-tipo">Infraestructura · En producción</div>
+        <h3>Servidor de Gestión Documental</h3>
+        <p>
+          Implementación completa de servidor Nextcloud para organización de auditoría. Incluye gestión de usuarios y permisos por grupos, backups automatizados con retención configurable, monitor de servidor en tiempo real, acceso remoto seguro vía VPN (Tailscale) y hardening de seguridad.
+        </p>
+        <div class="proyecto-tags">
+          <span class="tag">Ubuntu Server</span>
+          <span class="tag">Nextcloud</span>
+          <span class="tag">Backup automático</span>
+          <span class="tag">Tailscale VPN</span>
+          <span class="tag">Monitoreo</span>
+        </div>
+        <div class="proyecto-resultado">Organización migró de carpetas físicas a gestión documental digital</div>
+      </div>
+
+      <div class="proyecto-card">
+        <div class="proyecto-tipo">Gestión documental · Herramienta interna</div>
+        <h3>Sistema de Remisiones y Control Documental</h3>
+        <p>
+          Herramienta administrativa para control de remisiones, validaciones de documentos, organización de registros por categorías y consulta rápida. Automatización de procesos internos que antes requerían revisión manual y seguimiento en hojas de cálculo.
+        </p>
+        <div class="proyecto-tags">
+          <span class="tag">PHP</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">Panel admin</span>
+          <span class="tag">Auditoría</span>
+        </div>
+        <div class="proyecto-resultado">Centralización del control documental en un solo sistema</div>
+      </div>
+
+      <div class="proyecto-card">
+        <div class="proyecto-tipo">App web · Proyecto propio</div>
+        <h3>StrideAI — Entrenador Deportivo con IA</h3>
+        <p>
+          Aplicación fullstack que conecta con Strava vía OAuth2, analiza el historial de actividades del atleta y genera planes de entrenamiento personalizados usando IA. Incluye métricas de carga (CTL/ATL/TSB) y chat con entrenador inteligente.
+        </p>
+        <div class="proyecto-tags">
+          <span class="tag">Kotlin</span>
+          <span class="tag">Spring Boot</span>
+          <span class="tag">React</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">IA generativa</span>
+          <span class="tag">OAuth2</span>
+        </div>
+        <div class="proyecto-resultado">Demostración de integración completa backend + IA + frontend moderno</div>
+      </div>
+
+      <div class="proyecto-card">
+        <div class="proyecto-tipo">Desarrollo web · Despliegue internacional</div>
+        <h3>Sitios Web Telemed — 4 países</h3>
+        <p>
+          Desarrollo y despliegue de sitios web para cliente de telemedicina en Colombia, Chile, República Dominicana y Grupo corporativo. Control de versiones con Git, despliegue en cPanel y flujo de actualización estructurado por país.
+        </p>
+        <div class="proyecto-tags">
+          <span class="tag">HTML/CSS</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">Tailwind</span>
+          <span class="tag">Git</span>
+          <span class="tag">cPanel</span>
+        </div>
+        <div class="proyecto-resultado">Presencia web unificada operando en 4 países de forma independiente</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section id="servicios" class="servicios-section">
+  <div class="section-inner">
+    <div class="section-label">Qué puedo hacer por usted</div>
+    <h2 class="section-title">Servicios con precio claro</h2>
+    <p class="section-desc">Sin propuestas vagas. Cada servicio tiene un alcance definido y un rango de inversión real.</p>
+
+    <div class="servicios-grid">
+      <div class="servicio-item">
+        <div class="servicio-icon">📋</div>
+        <h4>Sistema de registro y validación</h4>
+        <p>Formularios inteligentes con validación, base de datos, generación de documentos PDF y panel administrativo. Ideal para afiliaciones, inscripciones o registros con volumen.</p>
+        <span class="servicio-precio">Desde $1.2M COP</span>
+      </div>
+      <div class="servicio-item">
+        <div class="servicio-icon">📄</div>
+        <h4>Generación automática de documentos</h4>
+        <p>PDFs automáticos con datos del sistema, firmas digitales, envío por correo y almacenamiento organizado. Elimina la generación manual de certificados, actas o avales.</p>
+        <span class="servicio-precio">Desde $800K COP</span>
+      </div>
+      <div class="servicio-item">
+        <div class="servicio-icon">🔐</div>
+        <h4>Panel administrativo con control de acceso</h4>
+        <p>Intranet privada con autenticación, roles de usuario, visualización de documentos y logs de auditoría. Cada usuario ve solo lo que le corresponde.</p>
+        <span class="servicio-precio">Desde $1.5M COP</span>
+      </div>
+      <div class="servicio-item">
+        <div class="servicio-icon">🖥️</div>
+        <h4>Servidor y gestión documental</h4>
+        <p>Instalación y configuración de servidor propio con Nextcloud, usuarios, permisos, backups automáticos y acceso remoto seguro. Su información en su servidor, no en terceros.</p>
+        <span class="servicio-precio">Desde $2M COP</span>
+      </div>
+      <div class="servicio-item">
+        <div class="servicio-icon">⚙️</div>
+        <h4>Automatización de procesos internos</h4>
+        <p>Identificamos qué se hace manualmente en su organización y construimos la herramienta que lo automatiza: reportes, notificaciones, flujos de aprobación, exportaciones.</p>
+        <span class="servicio-precio">Desde $900K COP</span>
+      </div>
+      <div class="servicio-item">
+        <div class="servicio-icon">🌐</div>
+        <h4>Sitio web o landing page profesional</h4>
+        <p>Diseño y desarrollo a medida, sin plantillas genéricas. Despliegue en su hosting, control de versiones incluido y actualización fácil posterior.</p>
+        <span class="servicio-precio">Desde $600K COP</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK -->
+<section id="stack" class="stack-section">
+  <div class="section-inner">
+    <div class="section-label">Tecnologías</div>
+    <h2 class="section-title">Stack técnico</h2>
+    <p class="section-desc">Herramientas con las que trabajo de forma habitual, no solo en papel.</p>
+
+    <div class="stack-grid">
+      <div class="stack-group">
+        <h4>Backend</h4>
+        <div class="stack-items">
+          <div class="stack-item">PHP puro</div>
+          <div class="stack-item">Kotlin + Spring Boot</div>
+          <div class="stack-item">Micronaut</div>
+          <div class="stack-item">Go</div>
+          <div class="stack-item">MySQL / MariaDB</div>
+          <div class="stack-item">PostgreSQL</div>
+        </div>
+      </div>
+      <div class="stack-group">
+        <h4>Frontend</h4>
+        <div class="stack-items">
+          <div class="stack-item">HTML5 / CSS3</div>
+          <div class="stack-item">JavaScript / AJAX</div>
+          <div class="stack-item">React + Vite</div>
+          <div class="stack-item">Tailwind CSS</div>
+          <div class="stack-item">Formularios dinámicos</div>
+          <div class="stack-item">Canvas / firma digital</div>
+        </div>
+      </div>
+      <div class="stack-group">
+        <h4>Infraestructura</h4>
+        <div class="stack-items">
+          <div class="stack-item">Ubuntu Server</div>
+          <div class="stack-item">Nextcloud</div>
+          <div class="stack-item">Apache / Nginx</div>
+          <div class="stack-item">Tailscale VPN</div>
+          <div class="stack-item">Backups automáticos</div>
+          <div class="stack-item">Railway / Vercel</div>
+        </div>
+      </div>
+      <div class="stack-group">
+        <h4>Herramientas</h4>
+        <div class="stack-items">
+          <div class="stack-item">Git + GitHub</div>
+          <div class="stack-item">cPanel / SSH</div>
+          <div class="stack-item">Generación de PDFs</div>
+          <div class="stack-item">APIs REST</div>
+          <div class="stack-item">OAuth2 / JWT</div>
+          <div class="stack-item">WordPress personalizado</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="contacto" class="cta-section">
+  <div class="cta-inner">
+    <div>
+      <h2>¿Su organización tiene un proceso que debería estar automatizado?</h2>
+      <p>Cuénteme cómo funciona hoy. En 30 minutos le digo si puedo construir la solución y a qué costo.</p>
+    </div>
+    <a href="https://wa.me/57XXXXXXXXXX?text=Hola%20Alejandro,%20vi%20tu%20portafolio%20y%20me%20interesa%20hablar%20sobre%20un%20proyecto" class="btn-white" target="_blank">Escribir por WhatsApp</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Alejandro<span>.</span></div>
+  <p>Desarrollo de sistemas a medida · Colombia · 2025</p>
+</footer>
+
+</body>
+</html>
