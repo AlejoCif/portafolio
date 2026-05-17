@@ -242,6 +242,67 @@
     border-color: white;
   }
 
+  /* ── MANIFIESTO ── */
+  .manifiesto-section {
+    background: var(--paper);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .manifiesto-inner {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 6rem 3rem;
+  }
+
+  .manifiesto-intro {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 3rem;
+  }
+
+  .manifiesto-bloque {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .manifiesto-bloque p {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    padding-left: 1.5rem;
+    border-left: 3px solid var(--border);
+    transition: border-color 0.2s;
+  }
+
+  .manifiesto-bloque p:hover { border-left-color: var(--accent); }
+
+  .manifiesto-bloque p span {
+    color: var(--accent);
+  }
+
+  .manifiesto-cierre {
+    margin-top: 3rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--border);
+    font-size: 1.05rem;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+    max-width: 620px;
+  }
+
+  @media (max-width: 900px) {
+    .manifiesto-inner { padding: 4rem 1.5rem; }
+    .manifiesto-bloque p { font-size: 1.15rem; }
+  }
+
   /* ── SECTIONS ── */
   section {
     position: relative;
@@ -802,6 +863,20 @@
       <a href="#proyectos" class="btn-primary">Ver proyectos</a>
       <a href="https://wa.me/573186903650" class="btn-secondary" target="_blank">WhatsApp</a>
     </div>
+  </div>
+</section>
+
+<!-- MANIFIESTO -->
+<section class="manifiesto-section">
+  <div class="manifiesto-inner">
+    <div class="manifiesto-intro">El costo oculto de no tener sistemas</div>
+    <div class="manifiesto-bloque">
+      <p>El problema no es que no tengan tecnología.<br>Es que no saben <span>cuánto les cuesta no tenerla.</span></p>
+      <p>Cada vez que un empleado busca un documento 20 minutos,<br><span>eso es dinero.</span></p>
+      <p>Cada vez que un proceso depende de que una sola persona esté disponible,<br><span>eso es riesgo.</span></p>
+      <p>Cada vez que la información vive en la cabeza de alguien y no en un sistema,<br><span>eso es una bomba de tiempo.</span></p>
+    </div>
+    <p class="manifiesto-cierre">Las empresas que crecen no son las que trabajan más duro. Son las que logran que sus procesos funcionen sin depender de heroísmos individuales.</p>
   </div>
 </section>
 
